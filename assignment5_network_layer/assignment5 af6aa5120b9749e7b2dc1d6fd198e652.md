@@ -1,4 +1,42 @@
-# assignment5_answer
+# assignment5
+
+### Q1
+
+1. 4, because the TCP sends as many segments as it could within the window size. It sent 4 segments, so the window is 4 at the first transmission round.
+2. time interval under slow start: 1 - 4, 11 - 14, 25 - 28. Because they all increase exponentially with the base of 2, i.e., 2^0, 2^1, 2^2, 2^3, ...
+3. Congestion Avoidance: 5 - 10, 15-24. The window increases 1 segment per transmission round.
+4. TDACK, because the TCP enter the fast recovery (window = 1/2 old threshold, congestion avoidance)  rather than the slow start from window = 1.
+5. Timeout, because the TCP restart from the slow start with window = 1.
+6. threshold = 32 at the 1st. transmission round. Because the TCP entering CA after reaching window = 32.
+7. threshold = 17. Because when the TDACK occur at round 6, the old congestion window = 34. Therefore the threshold = 1/2 old congestion window after entering the fast recovery (CA).
+8. threshold = 10. Because when the timeout occurs at round 10, the congestion window = 20, the new threshold should = 1/2 old congestion window after entering the slow start.
+9. at 4th round: 4+8+16+4
+    1. 4
+    2. 8
+    3. 16
+    4. 32
+10. congestion window = threshold = 4
+
+    If the TDACK happens, new threshold = 1/2 old congestion window, and new congestion window = new threshold
+
+### Q2
+
+1. Which bandwidth will be provided to this connection? What are the implications for the other connections between Router A and Router B? Explain your answers briefly.
+    1. bandwidth = 10 Mbit/s: Because the bottleneck will be the link 5, where the connection between host A and B has to share a total of 30 Mbit/s with other 2 connections ⇒ 30/3 = 10 Mbit. (as long as all connections do not have other bottleneck link)
+    2. BW of other 2 connections between router A and router B: 100 Mbit/s for each connection.
+
+        Because the connection of A and B only uses 10 Mbit/s, so the other 2 connections can share the remaining 200 Mbit/s, as long as they are not limited by other bottleneck link.
+
+2. Assume that we have the capability to modifiy the total capacity on Link 5. For the rest, all stays as before. How much bandwidth needs to be available on Link 5, so that the blue highlighted connection can obtain the highest possible bandwidth? Briefly show how you calculated the bandwidth required on Link 5. Why would an additional expansion of capacity on Link 5 not yield in a higher throughput? Explain briefly.
+    1. 100 Mbit/s
+
+        In order to acquire the highest possible bandwidth by only changing the capacity on link 5, the link 5 cannot be the bottleneck, or at least have the same BW as the bottleneck link. The current bottleneck except link5 are link 1 and link 2, which each connection can have 70 Mbit/s if shares the capacity fairly. Therefore, the connection needs at least 70 Mbit/s on the link 5.  The maximal total bandwidth of another 2 connections can only be 30 Mbit/s because their bandwidths are limited by the bottleneck link4 with capacity = 30 Mbit/s. The minimal capacity necessary is 100 Mbit/s.
+
+    2. Because the bottleneck will be on the link1 and link2 if link5's capacity ≥ 100 Mbit/s, which is 70 Mbit/s for the high lighted connection, further increments of capacity in link5 will not yeild a higher throughput.
+3. What are the consequences of Link 5’s expansion for the connections on Link 1? Specify the changes in bandwidths on Link 1 for each connection and explain your answer briefly.
+    - Changes in BW on L1 for each connection:
+        1. connection btw host A and host B: 10 Mbit/s → 70 Mbit/s
+        2. For other 2 connections: 100 Mbit/s → 70 Mbit/s
 
 ### Q3
 
@@ -117,17 +155,13 @@ address? (iii) What **subnet size** is being used?
 
     - fe80::44:8b27:f2b7:4051
 
-        ipv6, link-local unicast, 64, 18,446,744,073,709,551,616
+        ipv6, link-local unicast, /64, 18,446,744,073,709,551,616
 
     - 192.168.0.8
 
-        ipv4, Private Ranges (RFC1918), 24, 254
+        ipv4, Private Ranges (RFC1918), /24, 254
 
-    - **82:34:26:83:b8:01**
-    - **82:34:26:83:b8:00**
-    - 0a:e9:fe:7f:9c:fe
-    - 5e:08:9b:76:fd:95
-    - **ipv6, link-local unicast, 64, 18,446,744,073,709,551,616:**
+    - **ipv6, link-local unicast, /64, 18,446,744,073,709,551,616:**
         - fe80::5c08:9bff:fe76:fd95
         - fe80::1bf4:554f:14b7:7682
         - fe80::3c0f:5092:dba:a662
@@ -135,7 +169,10 @@ address? (iii) What **subnet size** is being used?
         - fe80::8b64:6f2a:1fe:9608
         - fe80::8170:afa1:7e81:b171
         - fe80::36d:698c:e3be:bbad
-4. Because my WIFI interface (en0) has only link-local IPv6 address, I assume my network does not support IPv6 (or my router did not turn on the  IPv6 setting). However, if my network supports the IPv6, I should reach both hosts on the internet an within my subnet via the IPv6 address that my ISP assign to me.
+4. Because my WIFI interface (en0) has only link-local IPv6 address but no global unicast (2000::/3 addresses), ~~I assume my network does not support IPv6 (or my router did not turn on the  IPv6 setting).~~ However, if my ISP supports the IPv6, I should reach both hosts on the internet and within my subnet via the IPv6 address that my ISP assign to me.
+    - My local network (subnet) probably supports IPv6, since my network interface is assigned a link-local IPv6 address. However, I do not have a global unicast IPv6 address, so I assume the network that my subnet connects to, i.e., my ISP, does not support the IPv6.
+    - I cannot reach the host on the global internet supporting IPv6.
+    - I could reach the host supporting IPv6 within my subnet using my link-local IPv6 address.
 
 ### Interfaces
 
